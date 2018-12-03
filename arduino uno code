@@ -1,0 +1,53 @@
+
+// set pin numbers:
+const int sensorPin = 4; // the number of the sensor pin
+const int analogPin =A0;
+long low = 0;
+long high = 0;
+long lowTime = 0;
+long highTime = 0;
+
+void setup() {
+  Serial.begin(9600);
+  // initialize the sensor pin as an input
+  pinMode(sensorPin, INPUT);
+  pinMode(analogPin, INPUT);                
+  // Read starting value for millis... (just some value)
+while(digitalRead(sensorPin) == LOW) {;}
+  high = millis();
+}
+
+void loop(){
+  
+  while(digitalRead(sensorPin) == HIGH) {;}
+  low = millis();
+  highTime = low - high;
+  
+  while(digitalRead(sensorPin) == LOW) {;}
+  high = millis();
+  lowTime = high - low;
+
+  // Validity check high+low = 1004 (small margin or error allowed -> 990)
+  if(1)
+  {
+    Serial.print("TIME :  ");
+    Serial.print(highTime,DEC);
+    Serial.println("ms");
+    //Serial.print("L: ");
+    //Serial.println(lowTime,DEC);
+    Serial.print("CO2 present : ");
+    Serial.println(digitalRead(sensorPin) ,DEC);
+    Serial.print("Carbon-di-oxide level : ");
+    Serial.print(analogRead(analogPin), DEC);
+    Serial.println(" ppm");
+    Serial.println();
+    Serial.println();
+    
+        
+  } else {
+    // Output in case of invalid check: value instead of 1004 ms
+    Serial.print("-->> CHECK:");
+    Serial.println(lowTime+highTime, DEC);
+     
+  }
+}
